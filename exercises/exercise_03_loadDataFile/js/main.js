@@ -2,23 +2,30 @@
 *    main.js
 */
 
-w = 40
-h = 100
-
-var data = [ 25, 20, 15, 10, 5 ]
+const size = 400;
 
 var svg = d3.select( '#chart-area' ).append( 'svg' )
-  .attr( 'widt', 400 )
-  .attr( 'height', 400 );
+  .attr( 'widt', size )
+  .attr( 'height', size );
 
-var rect = svg.selectAll( 'rect' )
-  .data(data);
+d3.json( 'data/ages.json' ).then( ( data ) => {
+  data.forEach( ( d ) => {
+    d.age = +d.age;
+  });
+  console.log( data );
 
-rect.enter().append( 'rect' )
-  .attr( 'x', ( d, i ) => { return w * i + w * i } )
-  .attr( 'y', ( d ) => { return h - d } )
-  .attr( 'width', w )
-  .attr( 'height', ( d ) => { return d } )
-  .attr( 'fill', 'red' );
+  let currPos = -40;
+  let circle = svg.selectAll( 'circle' )
+    .data(data);
+
+  circle.enter().append( 'circle' )
+    .attr( 'cy', size / 2 )
+    .attr( 'cx', ( d ) => {
+      currPos += ( d.age + 5 ) * 4;
+      return currPos
+    } )
+    .attr( 'r', ( d ) => { return d.age * 2.5 } )
+    .attr( 'fill', 'red' );
+});
 
 
