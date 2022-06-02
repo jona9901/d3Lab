@@ -7,17 +7,17 @@ const width = 700;
 const height = 500;
 var flag = true;
 const g = d3
-  .select('#chart-area')
+  .select('#chart-area ')
   .append('svg')
-  .attr('width', width + margin.right + margin.left)
-  .attr('height', height + margin.top + margin.bottom)
-  .append('g')
-  .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+  .attr('width', width + margin.right + margin.left )
+  .attr('height', height + margin.top + margin.bottom )
+  .append( 'g' )
+  .attr( 'transform', 'translate(' + margin.left + ', ' + margin.top + ')');
 const xAxisGroup = g
-  .append('g')
-  .attr('class', 'x axis')
-  .attr('transform', 'translate(0, ' + height + ')');
-const yAxisGroup = g.append('g').attr('class', 'y axis');
+  .append( 'g' )
+  .attr( 'class', 'x axis' )
+  .attr( 'transform', 'translate(0, ' + height + ')' );
+const yAxisGroup = g.append( 'g' ).attr( 'class', 'y axis' );
 g.append('text')
   .attr('x', width / 2)
   .attr('y', height + 60)
@@ -48,7 +48,8 @@ d3.json('data/revenues.json')
       d.profit = +d.profit;
     });
     d3.interval(() => {
-      update(data);
+      var newData = flag ? data : data.slice(1);
+      update(newData);
       flag = !flag;
     }, 1000);
     update(data);
@@ -63,7 +64,7 @@ function update(data) {
   y.domain([0, d3.max(data, (d) => d[value])]);
   xAxisGroup.call(xAxisCall);
   yAxisGroup.call(yAxisCall);
-  const bars = g.selectAll('rect').data(data);
+  const bars = g.selectAll('rect').data(data, (d) => d.month);
   bars.exit().remove();
   bars
     .attr('x', (d) => x(d.month))
